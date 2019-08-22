@@ -369,7 +369,7 @@
 			</div>
 			<div class="col-md-8" style="position: fixed; top:80px; right:00px;">
 				<h2>API Response</h2>
-				<div id="content" style="background-color: rgba(0, 0, 0, 0.3); min-height: 500px;">
+				<div id="content" style="background-color: rgba(0, 0, 0, 0.3); min-height: 500px; overflow:auto;">
 				</div>
 			</div>
 		</div>

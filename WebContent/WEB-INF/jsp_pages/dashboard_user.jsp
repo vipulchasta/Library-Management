@@ -46,6 +46,21 @@
 		xhttp.setRequestHeader("Accept", "application/json");
 		xhttp.send();
 	}
+	function loadExpiringBooks() {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				document.getElementById("content").innerHTML = this.responseText;
+			} else if(this.readyState == 4) {
+				document.getElementById("content").innerHTML = "<span style='color:red;'>ERROR</span>";
+			} else {
+				document.getElementById("content").innerHTML = "<span style='color:blue;'>Loading ...</span>";
+			}
+		};
+		xhttp.open("GET", "/rest/user/getexpirebooks", true);
+		xhttp.setRequestHeader("Accept", "application/json");
+		xhttp.send();
+	}
 </script>
 <body class="h-100">
 	<nav class="navbar navbar-default">  
@@ -85,13 +100,22 @@
 							<button class="btn btn-default" onclick="loadBooks()"> Load All Book Data </button>
 						</div>
 					</div>
-					<hr>
 					
+					<div style="background-color: rgba(0, 50, 0, 0.3); min-height: 50px; padding: 10px; margin:10px;">
+						<h4>Book Data {Expiring or About to Expire}</h4>
+						<hr>
+						<div align="center" style="padding: 10px;">
+							<button class="btn btn-default" onclick="loadExpiringBooks()"> Load Books </button>
+						</div>
+					</div>
+					
+					<hr>
+					 
 				</div>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-8" style="position: fixed; top:80px; right:00px;">
 				<h2>API Response</h2>
-				<div id="content" style="background-color: rgba(0, 0, 0, 0.3); min-height: 500px;">
+				<div id="content" style="background-color: rgba(0, 0, 0, 0.3); min-height: 500px; overflow:auto;">
 				</div>
 			</div>
 		</div>
