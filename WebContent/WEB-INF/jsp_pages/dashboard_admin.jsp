@@ -59,8 +59,8 @@
 		};
 		var bookname = document.getElementById("createBook_bookname").value;
 		var restAPI = "/rest/admin/createbook";
-		restAPI += "?bookname=" + bookname;
-		xhttp.open("GET", restAPI, true);
+		restAPI += "/" + bookname;
+		xhttp.open("POST", restAPI, true);
 		xhttp.setRequestHeader("Accept", "application/json");
 		xhttp.send();
 	}
@@ -77,8 +77,8 @@
 		};
 		var username = document.getElementById("deleteUsers_username").value;
 		var restAPI = "/rest/admin/deleteuser";
-		restAPI += "?username=" + username;
-		xhttp.open("GET", restAPI, true);
+		restAPI += "/" + username;
+		xhttp.open("DELETE", restAPI, true);
 		xhttp.setRequestHeader("Accept", "application/json");
 		xhttp.send();
 	}
@@ -97,10 +97,10 @@
 		var password = document.getElementById("createUsers_password").value;
 		var enabled = "TRUE";
 		var restAPI = "/rest/admin/createuser";
-		restAPI += "?username=" + username;
-		restAPI += "&password=" + password;
-		restAPI += "&enabled=" + enabled;
-		xhttp.open("GET", restAPI, true);
+		restAPI += "/" + username;
+		restAPI += "/" + password;
+		restAPI += "/" + enabled;
+		xhttp.open("POST", restAPI, true);
 		xhttp.setRequestHeader("Accept", "application/json");
 		xhttp.send();
 	}
@@ -121,11 +121,11 @@
 		var assignmentDate = document.getElementById("assignBook_assignmentDate").value;
 		var returnDate = document.getElementById("assignBook_returnDate").value;
 		var restAPI = "/rest/admin/assignbook";
-		restAPI += "?username=" + username;
-		restAPI += "&bookId=" + bookId;
-		restAPI += "&assignmentDate=" + assignmentDate;
-		restAPI += "&returnDate=" + returnDate;
-		xhttp.open("GET", restAPI, true);
+		restAPI += "/" + bookId;
+		restAPI += "/" + username;
+		restAPI += "/" + assignmentDate;
+		restAPI += "/" + returnDate;
+		xhttp.open("PUT", restAPI, true);
 		xhttp.setRequestHeader("Accept", "application/json");
 		xhttp.send();
 	}
@@ -143,8 +143,8 @@
 		};
 		var bookId = document.getElementById("returnBook_bookId").value;
 		var restAPI = "/rest/admin/returnbook";
-		restAPI += "?bookId=" + bookId;
-		xhttp.open("GET", restAPI, true);
+		restAPI += "/" + bookId;
+		xhttp.open("PUT", restAPI, true);
 		xhttp.setRequestHeader("Accept", "application/json");
 		xhttp.send();
 	}
@@ -162,8 +162,8 @@
 		};
 		var bookId = document.getElementById("removeBook_bookId").value;
 		var restAPI = "/rest/admin/deletebook";
-		restAPI += "?bookId=" + bookId;
-		xhttp.open("GET", restAPI, true);
+		restAPI += "/" + bookId;
+		xhttp.open("DELETE", restAPI, true);
 		xhttp.setRequestHeader("Accept", "application/json");
 		xhttp.send();
 	}

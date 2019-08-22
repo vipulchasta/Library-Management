@@ -4,15 +4,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.project.librarymanagement.Book;
 import com.project.librarymanagement.BookManager;
+import com.project.librarymanagement.ClientResponse;
 import com.project.librarymanagement.User;
 import com.project.librarymanagement.UserManager;
 
@@ -37,11 +40,11 @@ public class AdminAPIs {
 		return BookManager.getAllBooks();
 	}
 
-	@GET
-	@Path("/createuser")
+	@POST
+	@Path("/createuser/{username}/{password}/{enabled}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User restCreateUser(@QueryParam("username") String username, @QueryParam("password") String password,
-			@QueryParam("enabled") String enabled) {
+	public User restCreateUser(@PathParam("username") String username, @PathParam("password") String password,
+			@PathParam("enabled") String enabled) {
 		Boolean enBool = true;
 		User user = UserManager.getUserByUsername(username);
 		if (user != null) {
@@ -53,99 +56,120 @@ public class AdminAPIs {
 		return user;
 	}
 
-	@Path("/createbook")
-	@GET
+	@POST
+	@Path("/createbook/{bookname}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Book restCreateBook(@QueryParam("bookname") String bookname) {
+	public Book restCreateBook(@PathParam("bookname") String bookname) {
 		return BookManager.addBook(bookname);
 	}
 
-	@Path("/deleteuser")
-	@GET
+	@DELETE
+	@Path("/deleteuser/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String restDeleteUser(@QueryParam("username") String username) {
+	public ClientResponse restDeleteUser(@PathParam("username") String username) {
+
+		ClientResponse clientResponse = new ClientResponse();
 		User user = UserManager.getUserByUsername(username);
+
 		if (user == null) {
-			return "{'message': 'Invalid User'}";
+			clientResponse.setMessage("Invalid User");
+			return clientResponse;
 		}
+
 		List<Book> books = BookManager.getBooksByUser(username);
 		if (books != null && books.size() > 0) {
-			return "{'message': 'User has books assigned to him, User Can't be deleted'}";
+			clientResponse.setMessage("User has books assigned to him, User Can't be deleted");
+			return clientResponse;
 		}
+
 		UserManager.removeUser(user);
-		return "{'message': 'User Removed From Database'}";
+		clientResponse.setSuccess(true);
+		clientResponse.setMessage("User Removed From Database");
+
+		return clientResponse;
 	}
 
-	@Path("/assignbook")
-	@GET
+	@PUT
+	@Path("/assignbook/{bookId}/{username}/{assignmentDate}/{returnDate}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String restAssignBook(@QueryParam("username") String username,
-			@QueryParam("bookId") String bookId,
-			@QueryParam("assignmentDate") String assignmentDate,
-			@QueryParam("returnDate") String returnDate
-			) {
+	public ClientResponse restAssignBook(@PathParam("bookId") String bookId, @PathParam("username") String username,
+			@PathParam("assignmentDate") String assignmentDate, @PathParam("returnDate") String returnDate) {
+
+		ClientResponse clientResponse = new ClientResponse();
 		Integer bookIdInt;
+
 		try {
 			bookIdInt = Integer.parseInt(bookId);
 			System.out.println("restAssignBook()=> bookIdInt: " + bookIdInt);
 		} catch (Exception e) {
-			return "{'message': 'BookId must be integer'}";
+			clientResponse.setMessage("BookId must be integer");
+			return clientResponse;
 		}
 
 		Book book = BookManager.getBookById(bookIdInt);
 		if (book == null) {
-			return "{'message': 'Book does not exist in the database'}";
+			clientResponse.setMessage("Book does not exist in the database");
+			return clientResponse;
 		}
 
 		if (book.getUsername() != null) {
-			return "{'message': 'Book is Already Assigned to: " + book.getUsername() + "'}";
+			clientResponse.setMessage("Book is Already Assigned to: " + book.getUsername());
+			return clientResponse;
 		}
 
 		User user = UserManager.getUserByUsername(username);
 		if (user == null) {
-			return "{'message': 'User does not exist in the database'}";
+			clientResponse.setMessage("User does not exist in the database");
+			return clientResponse;
 		}
 
 		Date dateOfAssignment;
 		Date dateOfAssignmentExpire;
 		try {
-			System.out.println("assignmentDate: "+assignmentDate);
-			System.out.println("returnDate: "+returnDate);
+			System.out.println("assignmentDate: " + assignmentDate);
+			System.out.println("returnDate: " + returnDate);
 			dateOfAssignment = new SimpleDateFormat("yyyy-MM-dd").parse(assignmentDate);
 			dateOfAssignmentExpire = new SimpleDateFormat("yyyy-MM-dd").parse(returnDate);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Exception: " + e);
-			return "{'message': 'Invalid Date'}";
+			clientResponse.setMessage("Invalid Date");
+			return clientResponse;
 		}
-		//TODO: both date validation
+		// TODO: both date validation
 		book.setUsername(username);
 		book.setDateOfAssignment(dateOfAssignment);
 		book.setDateOfAssignmentExpire(dateOfAssignmentExpire);
 
 		BookManager.updateBook(book);
 
-		return "{'message': 'Updated User of the Book'}";
+		clientResponse.setMessage("Updated User of the Book");
+		clientResponse.setSuccess(true);
+		return clientResponse;
 	}
 
-	@Path("/returnbook")
-	@GET
+	@PUT
+	@Path("/returnbook/{bookId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String restReturnBook(@QueryParam("bookId") String bookId) {
+	public ClientResponse restReturnBook(@PathParam("bookId") String bookId) {
+		ClientResponse clientResponse = new ClientResponse();
 		Integer bookIdInt;
+
 		try {
 			bookIdInt = Integer.parseInt(bookId);
 			System.out.println("restAssignBook()=> bookIdInt: " + bookIdInt);
 		} catch (Exception e) {
-			return "{'message': 'BookId must be integer'}";
+			clientResponse.setMessage("BookId must be integer");
+			return clientResponse;
 		}
 
 		Book book = BookManager.getBookById(bookIdInt);
 		if (book == null) {
-			return "{'message': 'Book does not exist in the database'}";
+			clientResponse.setMessage("Book does not exist in the database");
+			return clientResponse;
 		}
 		if (book.getUsername() == null) {
-			return "{'message': 'Book is already with the library'}";
+			clientResponse.setMessage("Book is already with the library");
+			return clientResponse;
 		}
 
 		book.setUsername(null);
@@ -153,41 +177,40 @@ public class AdminAPIs {
 		book.setDateOfAssignmentExpire(null);
 		BookManager.updateBook(book);
 
-		return "{'message': 'Book returned to the library'}";
+		clientResponse.setSuccess(true);
+		clientResponse.setMessage("Book returned to the library");
+		return clientResponse;
 	}
 
-	@Path("/deletebook")
-	@GET
+	@DELETE
+	@Path("/deletebook/{bookId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String restRemoveBook(@QueryParam("bookId") String bookId) {
+	public ClientResponse restRemoveBook(@PathParam("bookId") String bookId) {
+		ClientResponse clientResponse = new ClientResponse();
 		Integer bookIdInt;
+
 		try {
 			bookIdInt = Integer.parseInt(bookId);
 			System.out.println("restAssignBook()=> bookIdInt: " + bookIdInt);
 		} catch (Exception e) {
-			return "{'message': 'BookId must be integer'}";
+			clientResponse.setMessage("BookId must be integer");
+			return clientResponse;
 		}
 		Book book = BookManager.getBookById(bookIdInt);
 		if (book == null) {
-			return "{'message': 'Book does not exist in the database'}";
+			clientResponse.setMessage("Book does not exist in the database");
+			return clientResponse;
 		}
 		if (book.getUsername() != null) {
-			return "{'message': 'Book is assigned to: " + book.getUsername() + ", return to library before deleting}";
+			clientResponse
+					.setMessage("Book is assigned to: " + book.getUsername() + ", return to library before deleting");
+			return clientResponse;
 		}
 
 		BookManager.removeBook(book);
-		return "{'message': 'Book Removed From Database'}";
+		clientResponse.setSuccess(true);
+		clientResponse.setMessage("Book Removed From Database");
+		return clientResponse;
 	}
 
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String defaultRoute() {
-		return "Not Supported";
-	}
-
-	@POST
-	@Produces(MediaType.TEXT_HTML)
-	public String defaultRoutePOST() {
-		return "Not Supported";
-	}
 }
