@@ -28,7 +28,8 @@
 	<!-- Mapping of Static Content -->
 	<mvc:resources mapping="/vendor/**"
 		location="/WEB-INF/vendor/" />
-
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
+	<mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
 	<mvc:annotation-driven />
 
 </beans>

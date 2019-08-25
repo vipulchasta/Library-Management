@@ -53,7 +53,7 @@
 					List<Book> books = BookManager.getBooksByUser(user.getUsername());
 					List<Book> booksExpiring = BookManager.getExpiringBooksByUser(authentication.getName(), 5);
 				%>
-				<div id="content" style="background-color: rgba(0, 0, 0, 0.3); font-size: 20px;">
+				<div id="content" style="background-color: rgba(0, 50, 0, 0.3); font-size: 20px; padding: 20px;">
 					<table class="table table-bordered">
 						<tr>
 							<th> Username: </th>

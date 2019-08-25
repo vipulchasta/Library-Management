@@ -45,6 +45,29 @@ public class UserManager {
 	}
 
 	/**
+	 * Update User -> Updates the entire user entity in the database
+	 *
+	 * @param user
+	 */
+	public static void updateUser(User user) {
+		factory = HibernateUtil.getSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx = null;
+
+		try {
+			tx = session.beginTransaction();
+			session.update(user);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+
+	/**
 	 * removeUser() -> Removes user form the database
 	 * 
 	 * @param user

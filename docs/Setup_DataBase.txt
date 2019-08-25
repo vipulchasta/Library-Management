@@ -1,0 +1,22 @@
+CREATE TABLE users(
+   id SERIAL,
+   username varchar(70) NOT NULL,
+   password varchar(70) NOT NULL,
+   enabled boolean NOT NULL DEFAULT FALSE,
+   role varchar(30) NOT NULL DEFAULT 'ROLE_USER',
+   primary key(username),
+   UNIQUE (id)
+);
+
+
+
+CREATE TABLE books(
+   id SERIAL,
+   bookname varchar(70) NOT NULL,
+   username varchar(70) DEFAULT NULL,
+   date_of_addition DATE NOT NULL DEFAULT CURRENT_DATE,
+   date_of_assignment DATE DEFAULT NULL,
+   date_of_assignment_expire DATE DEFAULT NULL,
+   primary key(id),
+   FOREIGN KEY (username) REFERENCES users (username)
+);

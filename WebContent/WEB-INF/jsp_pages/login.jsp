@@ -37,7 +37,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-4"></div>
-			<div class="col-md-4" style="background-color: rgba(0, 0, 0, 0.3);">
+			<div class="col-md-4" style="background-color: rgba(0, 50, 0, 0.3);">
 				<h2>User Login</h2>
 				<%
 					String msg = (String) request.getAttribute("msg");
