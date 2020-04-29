@@ -21,12 +21,12 @@ var Book = Backbone.Model.extend({
 			return "Invalid bookname supplied."
 		}
 	},
-	urlRoot : 'http://localhost:8080/rest/admin/Book'
+	urlRoot : '/rest/admin/Book'
 });
 
 var BooksCollection = Backbone.Collection.extend({
     model: Book,
-	url : 'http://localhost:8080/rest/admin/Books'
+	url : '/rest/admin/Books'
 });
 
 var BookView = Backbone.View.extend({
@@ -122,12 +122,12 @@ var User = Backbone.Model.extend({
 			return "Invalid username supplied."
 		}
 	},
-	urlRoot : 'http://localhost:8080/rest/admin/User'
+	urlRoot : '/rest/admin/User'
 });
 
 var UsersCollection = Backbone.Collection.extend({
     model: User,
-	url : 'http://localhost:8080/rest/admin/Users'
+	url : '/rest/admin/Users'
 });
 
 var UserView = Backbone.View.extend({

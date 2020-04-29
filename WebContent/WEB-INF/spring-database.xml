@@ -8,9 +8,9 @@
 		<property name="driverClassName"
 			value="org.postgresql.Driver" />
 		<property name="url"
-			value="jdbc:postgresql://localhost:5432/postgis_test" />
-		<property name="username" value="user" />
-		<property name="password" value="user" />
+			value="jdbc:postgresql://localhost:5432/libraryDB" />
+		<property name="username" value="postgres" />
+		<property name="password" value="itIs#DbPass" />
 	</bean>
 
 </beans>
