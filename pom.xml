@@ -9,7 +9,7 @@
 	<name>Library Management</name>
 	<description>Library Management Portal</description>
 	<properties>
-		<spring.security.version>3.2.3.RELEASE</spring.security.version>
+		<spring.security.version>5.2.10.RELEASE</spring.security.version>
 		<spring.version>3.2.13.RELEASE</spring.version>
 	</properties>
 	<dependencies>
